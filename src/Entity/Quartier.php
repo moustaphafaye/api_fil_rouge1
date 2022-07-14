@@ -20,7 +20,7 @@ class Quartier
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["add:zone"])]
+    #[Groups(["add:zone","commander"])]
     #[ORM\Column(type: 'integer')]
     private $id;
 

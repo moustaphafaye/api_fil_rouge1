@@ -36,43 +36,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class  Boisson extends Produit   
 {
-    
-    #[Groups(["add:boisson","boisson:list","boisson:taille","ajouter:menu","menu:list","boisson:modifier","menu:simple"])]
-    #[ORM\ManyToMany(targetEntity: Taille::class, inversedBy: 'boissons')]
-    private $taille;
 
     #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'boisson')]
     private $menus;
 
+    
+
+    #[ORM\OneToMany(mappedBy: 'boisson', targetEntity: TailleBoisson::class,cascade:["persist"])]
+    #[Groups(["add:boisson"])]
+    private $tailleboisson;
+
     public function __construct()
     {
-        $this->taille = new ArrayCollection();
+        
         $this->menus = new ArrayCollection();
+        
+        $this->tailleboisson = new ArrayCollection();
     }
 
-    /**
-     * @return Collection<int, Taille>
-     */
-    public function getTaille(): Collection
-    {
-        return $this->taille;
-    }
-
-    public function addTaille(Taille $taille): self
-    {
-        if (!$this->taille->contains($taille)) {
-            $this->taille[] = $taille;
-        }
-
-        return $this;
-    }
-
-    public function removeTaille(Taille $taille): self
-    {
-        $this->taille->removeElement($taille);
-
-        return $this;
-    }
+    
 
     /**
      * @return Collection<int, Menu>
@@ -96,6 +78,38 @@ class  Boisson extends Produit
     {
         if ($this->menus->removeElement($menu)) {
             // $menu->removeBoisson($this);
+        }
+
+        return $this;
+    }
+
+    
+
+    /**
+     * @return Collection<int, TailleBoisson>
+     */
+    public function getTailleboisson(): Collection
+    {
+        return $this->tailleboisson;
+    }
+
+    public function addTailleboisson(TailleBoisson $tailleboisson): self
+    {
+        if (!$this->tailleboisson->contains($tailleboisson)) {
+            $this->tailleboisson[] = $tailleboisson;
+            $tailleboisson->setBoisson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTailleboisson(TailleBoisson $tailleboisson): self
+    {
+        if ($this->tailleboisson->removeElement($tailleboisson)) {
+            // set the owning side to null (unless already changed)
+            if ($tailleboisson->getBoisson() === $this) {
+                $tailleboisson->setBoisson(null);
+            }
         }
 
         return $this;

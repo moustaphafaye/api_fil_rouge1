@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\PortionFriteRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\CommandeFrite;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PortionFriteRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: PortionFriteRepository::class)]
 #[ApiResource]
@@ -15,10 +16,19 @@ class PortionFrite extends Produit
     #[ORM\OneToMany(mappedBy: 'portionFrite', targetEntity: MenuPortionFrite::class)]
     private $menuprotionfrite;
 
+    #[ORM\OneToMany(mappedBy: 'portionFrite', targetEntity: CommandeFrite::class)]
+    private $commandefrite;
+
+   
+
+   
+
     public function __construct()
     {
         parent::__construct();
         $this->menuprotionfrite = new ArrayCollection();
+        $this->commandefrite = new ArrayCollection();
+        
     }
 
     /**
@@ -50,4 +60,42 @@ class PortionFrite extends Produit
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, CommandeFrite>
+     */
+    public function getCommandefrite(): Collection
+    {
+        return $this->commandefrite;
+    }
+
+    public function addCommandefrite(CommandeFrite $commandefrite): self
+    {
+        if (!$this->commandefrite->contains($commandefrite)) {
+            $this->commandefrite[] = $commandefrite;
+            $commandefrite->setPortionFrite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommandefrite(CommandeFrite $commandefrite): self
+    {
+        if ($this->commandefrite->removeElement($commandefrite)) {
+            // set the owning side to null (unless already changed)
+            if ($commandefrite->getPortionFrite() === $this) {
+                $commandefrite->setPortionFrite(null);
+            }
+        }
+
+        return $this;
+    }
+
+   
+
+  
+    
+  
+
+  
 }

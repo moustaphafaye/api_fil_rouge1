@@ -53,10 +53,17 @@ class Burger extends Produit
     #[ORM\OneToMany(mappedBy: 'burger', targetEntity: MenuBurger::class)]
     private $menuburger;
 
+    #[ORM\OneToMany(mappedBy: 'burger', targetEntity: CommandeBurger::class)]
+    private $commandeburger;
+
+    // #[ORM\OneToMany(mappedBy: 'burger', targetEntity: CommandeBurger::class)]
+    // private $commandeburger;
+
     public function __construct()
     {
         parent::__construct();
         $this->menuburger = new ArrayCollection();
+        // $this->commandeburger = new ArrayCollection();
     }
 
     /**
@@ -83,6 +90,66 @@ class Burger extends Produit
             // set the owning side to null (unless already changed)
             if ($menuburger->getBurger() === $this) {
                 $menuburger->setBurger(null);
+            }
+        }
+
+        return $this;
+    }
+
+    // /**
+    //  * @return Collection<int, CommandeBurger>
+    //  */
+    // public function getCommandeburger(): Collection
+    // {
+    //     return $this->commandeburger;
+    // }
+
+    // public function addCommandeburger(CommandeBurger $commandeburger): self
+    // {
+    //     if (!$this->commandeburger->contains($commandeburger)) {
+    //         $this->commandeburger[] = $commandeburger;
+    //         $commandeburger->setBurger($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeCommandeburger(CommandeBurger $commandeburger): self
+    // {
+    //     if ($this->commandeburger->removeElement($commandeburger)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($commandeburger->getBurger() === $this) {
+    //             $commandeburger->setBurger(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    /**
+     * @return Collection<int, CommandeBurger>
+     */
+    public function getCommandeburger(): Collection
+    {
+        return $this->commandeburger;
+    }
+
+    public function addCommandeburger(CommandeBurger $commandeburger): self
+    {
+        if (!$this->commandeburger->contains($commandeburger)) {
+            $this->commandeburger[] = $commandeburger;
+            $commandeburger->setBurger($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommandeburger(CommandeBurger $commandeburger): self
+    {
+        if ($this->commandeburger->removeElement($commandeburger)) {
+            // set the owning side to null (unless already changed)
+            if ($commandeburger->getBurger() === $this) {
+                $commandeburger->setBurger(null);
             }
         }
 

@@ -20,6 +20,7 @@ class Zone
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups(["commander"])]
     #[ORM\Column(type: 'integer')]
     private $id;
 
@@ -32,13 +33,20 @@ class Zone
     #[ORM\Column(type: 'integer')]
     private $prix;
 
-    #[Groups(["add:zone"])]
+    #[Groups(["add:zone","commander"])]
     #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Quartier::class)]
     private $quartier;
+
+    #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Commande::class)]
+    private $commande;
+
+   
 
     public function __construct()
     {
         $this->quartier = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
+        $this->commande = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -99,4 +107,36 @@ class Zone
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommande(): Collection
+    {
+        return $this->commande;
+    }
+
+    public function addCommande(Commande $commande): self
+    {
+        if (!$this->commande->contains($commande)) {
+            $this->commande[] = $commande;
+            $commande->setZone($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): self
+    {
+        if ($this->commande->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getZone() === $this) {
+                $commande->setZone(null);
+            }
+        }
+
+        return $this;
+    }
+
+  
 }

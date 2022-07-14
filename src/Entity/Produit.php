@@ -56,12 +56,10 @@ class Produit
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'produit')]
     private $gestionnaire;
 
-    #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy: 'produits')]
-    private $commande;
 
     public function __construct()
     {
-        $this->commande = new ArrayCollection();
+        
     }
 
     // #[Groups(["burger:all","user:of:burger","add:boisson"])]
@@ -132,31 +130,6 @@ class Produit
         return $this;
     }
 
-    /**
-     * @return Collection<int, Commande>
-     */
-    public function getCommande(): Collection
-    {
-        return $this->commande;
-    }
-
-    public function addCommande(Commande $commande): self
-    {
-        if (!$this->commande->contains($commande)) {
-            $this->commande[] = $commande;
-        }
-
-        return $this;
-    }
-
-    public function removeCommande(Commande $commande): self
-    {
-        $this->commande->removeElement($commande);
-
-        return $this;
-    }
-
-   
 
     /**
      * Get the value of file

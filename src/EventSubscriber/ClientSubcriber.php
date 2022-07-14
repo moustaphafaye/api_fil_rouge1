@@ -24,21 +24,24 @@ class ClientSubcriber implements EventSubscriberInterface
                 Events::prePersist,
             ];
         }
-    private function getClient()
+       
+    private function getClient() 
         {
         //dd($this->token);
             if (null === $token = $this->token) {
-            return null;
-            // dd($token);
-        }
-        if (!is_object($user = $token->getUser())) {
-            // e.g. anonymous authentication
+                return null;
+                // dd($token);
+            }
+            if (!is_object($user = $token->getUser())) {
+                // e.g. anonymous authentication
+                
             return null;
         }
             return $user;
         }
     public function prePersist(LifecycleEventArgs $args)
         {
+            
             if ($args->getObject() instanceof Commande) {
                 $args->getObject()->setClient($this->getClient());
             }

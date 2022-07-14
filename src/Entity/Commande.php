@@ -2,15 +2,21 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use App\Repository\CommandeRepository;
-use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
+use App\DataPersist\Persist;
+use App\Entity\CommandeBoisson;
+use Doctrine\ORM\Mapping as ORM;
+use App\Entity\CommandeTailleBoisson;
+use App\Repository\CommandeRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 #[ApiResource(collectionOperations:["get"=>[
@@ -48,11 +54,11 @@ class Commande
     #[ORM\Column(type: 'string', nullable: true)]
     private $nCommande;
 
-    #[Groups(["commander","commande:ajouter","commander:list","commander:detail","commandes:of:client"])]
+    #[Groups(["commande:ajouter","commander:list","commander:detail","commandes:of:client"])]
     #[ORM\Column(type: 'date', nullable: true)]
     private $date;
 
-    #[Groups(["commander","commande:ajouter","commander:list","commander:detail","commandes:of:client"])]
+    #[Groups(["commande:ajouter","commander:list","commander:detail","commandes:of:client"])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $etat;
 
@@ -73,16 +79,55 @@ class Commande
     private $gestionnaire;
 
     
+   
     #[Groups(["commander"])]
-    #[ORM\ManyToMany(targetEntity: Produit::class, mappedBy: 'commande')] 
-    private $produits;
-
     #[ORM\ManyToOne(targetEntity: Quartier::class, inversedBy: 'commande')]
     private $quartier;
 
+    #[Groups(["commander"])]
+    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: CommandeBurger::class,cascade:['Persist'])]
+    private $commandeburger;
+
+    #[Groups(["commander"])]
+    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: CommandeMenu::class,cascade:['Persist'])]
+    private $commandemenu;
+
+    // #[Groups(["commander"])]
+    // #[ORM\OneToMany(mappedBy: 'commande', targetEntity: CommandeTaille::class,cascade:['Persist'])]
+    // private $commandetaille;
+
+    #[Groups(["commander"])]
+    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: CommandeFrite::class,cascade:['Persist'])]
+    private $commandefrite;
+
+    #[Groups(["commander"])]
+    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: CommandeTailleBoisson::class,cascade:['Persist'])]
+    private $commandetailleboisson;
+
+    #[Groups(["commander"])]
+    #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'commande')]
+    private $zone;
+
+    
+
+    
+
+    
+
+   
+
     public function __construct()
     {
-        $this->produits = new ArrayCollection();
+        
+        $this->date=new \DateTime();
+        $this->etat="En cours";
+        $this->commandeburger = new ArrayCollection();
+        $this->commandeMenus = new ArrayCollection();
+        $this->commandemenu = new ArrayCollection();
+        $this->commandefrite = new ArrayCollection();
+        $this->commandetailleboisson = new ArrayCollection();
+        
+        
     }
 
     public function getId(): ?int
@@ -121,7 +166,7 @@ class Commande
 
     public function setEtat(?string $etat): self
     {
-        $this->etat = "En cours";
+        $this->etat = $etat;
 
         return $this;
     }
@@ -163,33 +208,6 @@ class Commande
         return $this;
     }
 
-    /**
-     * @return Collection<int, Produit>
-     */
-    public function getProduits(): Collection
-    {
-        return $this->produits;
-    }
-
-    public function addProduit(Produit $produit): self
-    {
-        if (!$this->produits->contains($produit)) {
-            $this->produits[] = $produit;
-            $produit->addCommande($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduit(Produit $produit): self
-    {
-        if ($this->produits->removeElement($produit)) {
-            $produit->removeCommande($this);
-        }
-
-        return $this;
-    }
-
     public function getClient(): ?Client
     {
         return $this->client;
@@ -213,4 +231,162 @@ class Commande
 
         return $this;
     }
+    /**
+     * @return Collection<int, CommandeBurger>
+     */
+    public function getCommandeburger(): Collection
+    {
+        return $this->commandeburger;
+    }
+
+    public function addCommandeburger(CommandeBurger $commandeburger): self
+    {
+        if (!$this->commandeburger->contains($commandeburger)) {
+            $this->commandeburger[] = $commandeburger;
+            $commandeburger->setCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommandeburger(CommandeBurger $commandeburger): self
+    {
+        if ($this->commandeburger->removeElement($commandeburger)) {
+            // set the owning side to null (unless already changed)
+            if ($commandeburger->getCommande() === $this) {
+                $commandeburger->setCommande(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommandeMenu>
+     */
+    public function getCommandemenu(): Collection
+    {
+        return $this->commandemenu;
+    }
+
+    public function addCommandemenu(CommandeMenu $commandemenu): self
+    {
+        if (!$this->commandemenu->contains($commandemenu)) {
+            $this->commandemenu[] = $commandemenu;
+            $commandemenu->setCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommandemenu(CommandeMenu $commandemenu): self
+    {
+        if ($this->commandemenu->removeElement($commandemenu)) {
+            // set the owning side to null (unless already changed)
+            if ($commandemenu->getCommande() === $this) {
+                $commandemenu->setCommande(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommandeFrite>
+     */
+    public function getCommandefrite(): Collection
+    {
+        return $this->commandefrite;
+    }
+
+    public function addCommandefrite(CommandeFrite $commandefrite): self
+    {
+        if (!$this->commandefrite->contains($commandefrite)) {
+            $this->commandefrite[] = $commandefrite;
+            $commandefrite->setCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommandefrite(CommandeFrite $commandefrite): self
+    {
+        if ($this->commandefrite->removeElement($commandefrite)) {
+            // set the owning side to null (unless already changed)
+            if ($commandefrite->getCommande() === $this) {
+                $commandefrite->setCommande(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommandeTailleBoisson>
+     */
+    public function getCommandetailleboisson(): Collection
+    {
+        return $this->commandetailleboisson;
+    }
+
+    public function addCommandetailleboisson(CommandeTailleBoisson $commandetailleboisson): self
+    {
+        if (!$this->commandetailleboisson->contains($commandetailleboisson)) {
+            $this->commandetailleboisson[] = $commandetailleboisson;
+            $commandetailleboisson->setCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommandetailleboisson(CommandeTailleBoisson $commandetailleboisson): self
+    {
+        if ($this->commandetailleboisson->removeElement($commandetailleboisson)) {
+            // set the owning side to null (unless already changed)
+            if ($commandetailleboisson->getCommande() === $this) {
+                $commandetailleboisson->setCommande(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getZone(): ?Zone
+    {
+        return $this->zone;
+    }
+
+    public function setZone(?Zone $zone): self
+    {
+        $this->zone = $zone;
+
+        return $this;
+    }
+
+    #[Assert\Callback]
+    public function validate(ExecutionContextInterface $context, )
+    {
+        if ((count($this->getCommandeburger())==0) && (count($this->getCommandemenu())==0)) {
+            
+            $context->buildViolation('Votre commande doit avoir au moins un menu ou un burger')
+                    ->addViolation();
+        }
+
+        if(((count($this->getCommandeburger())!=0) || (count($this->getCommandemenu())!=0)) && ((count($this->getCommandefrite())==0) || (count($this->getCommandetailleboisson())==0))){
+            $context->buildViolation('Votre commande doit avoir au moins un complement')
+                    ->addViolation();
+        }
+
+    }
+    
+
+    
+
+    
+
+    
+
+    
+
+   
 }

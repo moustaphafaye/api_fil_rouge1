@@ -2,15 +2,16 @@
 
 namespace App\Entity;
 
+use App\DataPersist\Persist;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MenuRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\DataPersist\Persist;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: MenuRepository::class)]
 #[ApiResource(collectionOperations:[
@@ -82,6 +83,12 @@ class Menu extends Produit
      #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuPortionFrite::class,cascade:["persist"])]
      private $menuportionfriet;
 
+     #[ORM\OneToMany(mappedBy: 'menu', targetEntity: CommandeMenu::class)]
+     private $commandemenu;
+
+    //  #[ORM\OneToMany(mappedBy: 'menu', targetEntity: CommandeMenu::class)]
+    //  private $commandemenu;
+
     
 
     public function __construct()
@@ -93,6 +100,7 @@ class Menu extends Produit
         $this->menutaille = new ArrayCollection();
         $this->menuburger = new ArrayCollection();
         $this->menuportionfriet = new ArrayCollection();
+        // $this->commandemenu = new ArrayCollection();
        
         
     }
@@ -215,6 +223,88 @@ class Menu extends Produit
     }
 
     
+    #[Assert\Callback]
+    public function validate(ExecutionContextInterface $context)
+    {
+        // ...
+        if (count($this->getMenuportionfriet())==0 && count($this->getMenutaille())==0) {
+            
+            $context->buildViolation('vous devez au moins ajouter un complement ')
+                    ->addViolation();
+        }
+
+        for ($i=0; $i < count($this->getMenuburger()) ; $i++) {
+            
+            
+            $ids[]= $this->getMenuburger()[$i]->getBurger()->getId();
+            
+        }
+         if(array_unique($ids)!=$ids){
+            $context->buildViolation('Vous avez une repetition de burger ')
+                    ->addViolation();
+         }
+
+    }
+
+    // /**
+    //  * @return Collection<int, CommandeMenu>
+    //  */
+    // public function getCommandemenu(): Collection
+    // {
+    //     return $this->commandemenu;
+    // }
+
+    // public function addCommandemenu(CommandeMenu $commandemenu): self
+    // {
+    //     if (!$this->commandemenu->contains($commandemenu)) {
+    //         $this->commandemenu[] = $commandemenu;
+    //         $commandemenu->setMenu($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeCommandemenu(CommandeMenu $commandemenu): self
+    // {
+    //     if ($this->commandemenu->removeElement($commandemenu)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($commandemenu->getMenu() === $this) {
+    //             $commandemenu->setMenu(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    /**
+     * @return Collection<int, CommandeMenu>
+     */
+    public function getCommandemenu(): Collection
+    {
+        return $this->commandemenu;
+    }
+
+    public function addCommandemenu(CommandeMenu $commandemenu): self
+    {
+        if (!$this->commandemenu->contains($commandemenu)) {
+            $this->commandemenu[] = $commandemenu;
+            $commandemenu->setMenu($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommandemenu(CommandeMenu $commandemenu): self
+    {
+        if ($this->commandemenu->removeElement($commandemenu)) {
+            // set the owning side to null (unless already changed)
+            if ($commandemenu->getMenu() === $this) {
+                $commandemenu->setMenu(null);
+            }
+        }
+
+        return $this;
+    }
     
 
     

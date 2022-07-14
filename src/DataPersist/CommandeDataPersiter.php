@@ -45,6 +45,7 @@ class CommandeDataPersiter implements DataPersisterInterface
     public function persist($data, array $context = [])
     {
         $this->calculPrix->calculPrixCommade($data);
+        
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();
     }

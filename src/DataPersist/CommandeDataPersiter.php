@@ -3,20 +3,12 @@
 
 namespace App\DataPersist;
 
-use App\Entity\Menu;
-use App\Entity\User;
-use App\Entity\Taille;
-use App\Entity\Boisson;
-use App\Entity\Produit;
+
 use App\Entity\Commande;
-use App\Entity\PortionFrite;
-use App\Services\EnvoieEmail;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Services\CalculPrixCommandeService;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
-use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Repository\TailleBoissonRepository;
 
 /**
  *
@@ -27,10 +19,12 @@ class CommandeDataPersiter implements DataPersisterInterface
     // private $prix = 0;
     public function __construct(
         EntityManagerInterface $entityManager,
-        CalculPrixCommandeService $calculPrix
+        CalculPrixCommandeService $calculPrix,
     ) {
         $this->_entityManager = $entityManager;
         $this->calculPrix = $calculPrix;
+       
+
     }
     /**
      * {@inheritdoc}
@@ -45,7 +39,7 @@ class CommandeDataPersiter implements DataPersisterInterface
     public function persist($data, array $context = [])
     {
         $this->calculPrix->calculPrixCommade($data);
-        
+       
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();
     }

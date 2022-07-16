@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommandeMenuRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommandeMenuRepository::class)]
@@ -17,6 +18,8 @@ class CommandeMenu
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    #[Assert\Positive(message:"la quantite doit étre superieure à 0")]
+    #[Assert\NotBlank(message:"la quantité est obligatoire")]
     #[Groups(["commander"])]
     #[ORM\Column(type: 'integer')]
     private $quantite;

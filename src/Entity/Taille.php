@@ -28,15 +28,15 @@ class Taille
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["add:boisson","commander","ajouter:menutaille","ajouter:menu","ajouter:menu","menu:list","boisson:modifier"])]
+    #[Groups(["add:boisson","commander","ajouter:menutaille","ajouter:menu","ajouter:menu","menu:list","boisson:modifier","commander:detail"])]
     #[ORM\Column(type: 'integer')]
     private $id;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    #[Groups(["add:taille","list:taile","boisson:list","boisson:taille","menu:simple"])]
+    #[Groups(["add:taille","list:taile","boisson:list","boisson:taille","menu:simple","commander:detail"])]
     private $Prix;
 
-    #[Groups(["add:taille","list:taile","boisson:list","boisson:taille","menu:simple"])]
+    #[Groups(["add:taille","list:taile","boisson:list","boisson:taille","menu:simple","commander:detail"])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $libelle;
 

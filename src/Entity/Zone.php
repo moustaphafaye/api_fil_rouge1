@@ -20,11 +20,11 @@ class Zone
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["commander"])]
+    #[Groups(["commander","commander:detail"])]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[Groups(["add:zone"])]
+    #[Groups(["add:zone","commander:detail"])]
     #[ORM\Column(type: 'string', length: 255)]
     private $nom;
 
@@ -33,7 +33,7 @@ class Zone
     #[ORM\Column(type: 'integer')]
     private $prix;
 
-    #[Groups(["add:zone","commander"])]
+    // #[Groups(["add:zone","commander"])]
     #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Quartier::class)]
     private $quartier;
 

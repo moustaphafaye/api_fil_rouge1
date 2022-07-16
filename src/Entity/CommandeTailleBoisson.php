@@ -23,7 +23,7 @@ class CommandeTailleBoisson
     #[ORM\ManyToOne(targetEntity: Commande::class, inversedBy: 'commandetailleboisson')]
     private $commande;
 
-    #[Groups(["commander"])]
+    #[Groups(["commander","commander:detail"])]
     #[ORM\ManyToOne(targetEntity: TailleBoisson::class, inversedBy: 'commandetailleboisson')]
     private $tailleBoisson;
 

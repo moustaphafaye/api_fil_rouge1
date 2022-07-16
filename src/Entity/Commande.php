@@ -78,17 +78,15 @@ class Commande
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'commandes')]
     private $gestionnaire;
 
-    
-   
-    #[Groups(["commander"])]
-    #[ORM\ManyToOne(targetEntity: Quartier::class, inversedBy: 'commande')]
-    private $quartier;
-
-    #[Groups(["commander"])]
+    #[Assert\Valid()]
+    #[Assert\NotBlank]
+    #[Groups(["commander","commander:detail"])]
     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: CommandeBurger::class,cascade:['Persist'])]
     private $commandeburger;
 
-    #[Groups(["commander"])]
+    #[Groups(["commander","commander:detail"])]
+    #[Assert\Valid()]
+    #[Assert\NotBlank]
     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: CommandeMenu::class,cascade:['Persist'])]
     private $commandemenu;
 
@@ -96,17 +94,23 @@ class Commande
     // #[ORM\OneToMany(mappedBy: 'commande', targetEntity: CommandeTaille::class,cascade:['Persist'])]
     // private $commandetaille;
 
-    #[Groups(["commander"])]
+    #[Groups(["commander","commander:detail"])]
+    #[Assert\Valid()]
+    #[Assert\NotBlank]
     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: CommandeFrite::class,cascade:['Persist'])]
     private $commandefrite;
 
-    #[Groups(["commander"])]
+    #[Groups(["commander","commander:detail"])]
     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: CommandeTailleBoisson::class,cascade:['Persist'])]
     private $commandetailleboisson;
 
-    #[Groups(["commander"])]
+    #[Groups(["commander","commander:detail"])]
     #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'commande')]
     private $zone;
+
+    #[Groups(["commander","commander:detail"])]
+    #[ORM\ManyToOne(targetEntity: Quartier::class, inversedBy: 'commande')]
+    private $quartier;
 
     
 
@@ -376,6 +380,7 @@ class Commande
             $context->buildViolation('Votre commande doit avoir au moins un complement')
                     ->addViolation();
         }
+        
 
     }
     

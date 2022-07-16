@@ -21,12 +21,13 @@ class TailleBoisson
 
     #[Groups(["add:boisson"])]
     #[ORM\Column(type: 'integer')]
-    private $quantitetailleboisson;
+    private $quantitetailleboissonstock;
 
+    #[Groups(["add:boisson"])]
     #[ORM\ManyToOne(targetEntity: Boisson::class, inversedBy: 'tailleboisson')]
     private $boisson;
 
-    #[Groups(["add:boisson"])]
+    #[Groups(["add:boisson","commander:detail"])]
     #[ORM\ManyToOne(targetEntity: Taille::class, inversedBy: 'tailleboisson')]
     private $taille;
 
@@ -42,15 +43,19 @@ class TailleBoisson
     {
         return $this->id;
     }
-
-    public function getQuantitetailleboisson(): ?int
+    public function setId(int $id):self
     {
-        return $this->quantitetailleboisson;
+        $this->id=$id;
+        return $this;
+    }
+    public function getQquantitetailleboissonstock(): ?int
+    {
+        return $this->quantitetailleboissonstock;
     }
 
-    public function setQuantitetailleboisson(int $quantitetailleboisson): self
+    public function setQuantitetailleboissonstock(int $quantitetailleboissonstock): self
     {
-        $this->quantitetailleboisson = $quantitetailleboisson;
+        $this->quantitetailleboissonstock = $quantitetailleboissonstock;
 
         return $this;
     }

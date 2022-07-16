@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CommandeBurgerRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommandeBurgerRepository::class)]
@@ -17,6 +18,8 @@ class CommandeBurger
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    #[Assert\Positive(message:"la nombre de burger doit étre superieure à 0")]
+    #[Assert\NotBlank(message:"la quantité est obligatoire")]
     #[Groups(["commander"])]
     #[ORM\Column(type: 'integer')]
     private $quantite;

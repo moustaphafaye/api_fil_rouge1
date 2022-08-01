@@ -19,6 +19,8 @@ class PortionFrite extends Produit
     #[ORM\OneToMany(mappedBy: 'portionFrite', targetEntity: CommandeFrite::class)]
     private $commandefrite;
 
+    
+
    
 
    
@@ -90,6 +92,8 @@ class PortionFrite extends Produit
 
         return $this;
     }
+
+    
 
    
 

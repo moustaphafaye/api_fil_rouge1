@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
         'method' => 'get',
         'path'=>'/catalogue',
         'status' => Response::HTTP_OK,
-        
+        'normalization_context' => ['groups' => ['catalogue']]
 ]]
 )]
 class Catalogue
@@ -21,7 +21,7 @@ class Catalogue
     // #[ORM\Id]
     // #[ORM\GeneratedValue]
     // #[ORM\Column(type: 'integer')]
-    private $id;
+    public ?int $id;
 
     public function getId(): ?int
     {

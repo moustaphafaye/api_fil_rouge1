@@ -26,14 +26,18 @@ final class ComplementDataProvider implements ContextAwareCollectionDataProvider
     public function getCollection(string $resourceClass, string $operationName = null, array $context = []): array
     {
         // dd("ok");
-        $complements=[];
-        $complements["portionRepo"]=$this->portionRepo->findAll();  
-        $complements["tailleRepo"]=$this->tailleRepo->findAll();
-        // dd($complements["tailleRepo"]);
-        // Retrieve the blog post collection from somewhere
-        // yield new BlogPost(1);
-        // yield new BlogPost(2);
-        return $complements;
+        if(Complement::class === $resourceClass){
+            return  [
+                    ["portion"=>$this->portionRepo->findAll()],
+                    ["taille"=>$this->tailleRepo->findAll()]
+            ];
+            
+        }
+        // $complements=[];
+        // $complements["portionRepo"]=$this->portionRepo->findAll();  
+        // $complements["tailleRepo"]=$this->tailleRepo->findAll();
+        
+        // return $complements;
     }
     
 }

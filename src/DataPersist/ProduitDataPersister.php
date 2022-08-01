@@ -41,12 +41,13 @@ class ProduitDataPersister implements DataPersisterInterface
      * @param Produit $data
      */
     public function persist($data, array $context = [])
-    {
+    {  
 
         if ($data instanceof Boisson or $data instanceof PortionFrite) {
             $data->setPrix(0);
         } 
         elseif ($data instanceof Menu) {
+           
             foreach ($data->getMenuburger() as $burgers) 
             {
                 $this->prix += $burgers->getBurger()->getPrix()*($burgers->getQuentity());
@@ -61,8 +62,12 @@ class ProduitDataPersister implements DataPersisterInterface
                     $this->prix += $Menuportion->getPortionFrite()->getPrix();
              }
             $data->setPrix($this->prix);
+            $image= stream_get_contents(fopen($data->getFile()->getRealPath(),"rt"));
+            $data->setImage($image);
+            
         }
-        else{
+        else {
+           
             // $data instanceof Burger;
             $image= stream_get_contents(fopen($data->getFile()->getRealPath(),"rt"));
             $data->setImage($image);

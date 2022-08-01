@@ -30,6 +30,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     itemOperations:["put"=>[
                     "security" => "is_granted('ROLE_GESTIONNAIRE')",
                     "security_message"=>"Vous n'avez pas access à cette Ressource",
+                    'normalization_context' => ['groups' => ['modifier']],
                             ],
                     "get"=>[
                         'method' => 'get',
@@ -45,16 +46,28 @@ use Symfony\Component\Serializer\Annotation\Groups;
                                 "security" => "is_granted('ROLE_GESTIONNAIRE')",
                                 "security_message"=>"Vous n'avez pas access à cette Ressource"
                                 ]
+                            ],
+                            'api_menus_burgers_get_subresource' => [
+                                'method' => 'GET',
+                                'normalization_context' => [ 'groups' => ['menu:of:burger'],
+                                "security" => "is_granted('ROLE_GESTIONNAIRE')",
+                                "security_message"=>"Vous n'avez pas access à cette Ressource"
+                                ]
                             ]
+
                         ]
 )]
 class Burger extends Produit
 {
+    #[Groups(["menu:of:burger","produit"])]
     #[ORM\OneToMany(mappedBy: 'burger', targetEntity: MenuBurger::class)]
     private $menuburger;
 
     #[ORM\OneToMany(mappedBy: 'burger', targetEntity: CommandeBurger::class)]
     private $commandeburger;
+
+    
+
 
     // #[ORM\OneToMany(mappedBy: 'burger', targetEntity: CommandeBurger::class)]
     // private $commandeburger;
@@ -64,6 +77,7 @@ class Burger extends Produit
         parent::__construct();
         $this->menuburger = new ArrayCollection();
         // $this->commandeburger = new ArrayCollection();
+       
     }
 
     /**
@@ -155,4 +169,36 @@ class Burger extends Produit
 
         return $this;
     }
+
+    // /**
+    //  * @return Collection<int, Detail>
+    //  */
+    // public function getDetails(): Collection
+    // {
+    //     return $this->details;
+    // }
+
+    // public function addDetail(Detail $detail): self
+    // {
+    //     if (!$this->details->contains($detail)) {
+    //         $this->details[] = $detail;
+    //         $detail->setBurger($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeDetail(Detail $detail): self
+    // {
+    //     if ($this->details->removeElement($detail)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($detail->getBurger() === $this) {
+    //             $detail->setBurger(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+   
 }

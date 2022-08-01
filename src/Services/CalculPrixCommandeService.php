@@ -52,6 +52,8 @@ use ApiPlatform\Core\DataPersister\DataPersisterInterface;
                     $this->_entityManager->flush();
                     // dd($this->repo->findById($a));
                     // $taille->getTailleBoisson()->setQuantitetailleboissonstock(($this->b)-($this->c));
+                    $this->b=0;
+                    $this->c=0;
                 }
             }
            

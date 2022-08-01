@@ -24,10 +24,11 @@ class Client extends User
     #[ORM\Column(type: 'integer', nullable: true)]
     private $telephone;
 
+    #[ApiSubresource]
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Commande::class)]
     private $commande;
 
-    // #[ApiSubresource]
+    // 
     // #[ORM\OneToMany(mappedBy: 'client', targetEntity: Commande::class)]
     // private $commande;
 

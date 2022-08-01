@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MenuBurgerRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -15,18 +16,21 @@ class MenuBurger
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(["ajouter:menu","menu:simple","menu:list","detail"])]
     private $id;
 
-    #[Groups(["ajouter:menu"])] 
+     #[Groups(["ajouter:menu","menu:list","menu:simple"])] 
     #[Assert\NotBlank(message:"la quantité est obligatoire")]
     #[Assert\Positive(message:"la quantité doit étre superieure à 0")]
     #[ORM\Column(type: 'integer')]
     private $quentity;
 
+    #[ApiSubresource]
+    // #[Groups(["menu:of:burger"])]
     #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menuburger')]
     private $menu;
 
-    #[Groups(["ajouter:menu"])]
+    #[Groups(["ajouter:menu","menu:list","menu:simple","detail"])]
     #[ORM\ManyToOne(targetEntity: Burger::class, inversedBy: 'menuburger')]
     private $burger;
 

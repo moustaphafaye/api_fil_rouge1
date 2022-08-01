@@ -19,16 +19,22 @@ final class MultipartDecoder implements DecoderInterface
     public function decode(string $data, string $format, array $context = []): ?array
     {
         $request = $this->requestStack->getCurrentRequest();
+      
         // ($request->files->all()['file']->getRealPath());
 
         if (!$request) {
             return null;
         }
-        $prix=$request->request->all()["prix"];
-        $prix=floatval($prix);
+        // $prix=$request->request->all()["prix"];
+        // $prix=floatval($prix);
+        // dd($prix);
         
         
-        $request->request->set("prix",$prix);
+        // $request->request->set("prix",$prix);
+        $prix= $request->request->get("prix");
+        $request->request->set("prix",floatval($prix));
+        // dd($request->request->set(['prix']));
+        
 
         return array_map(static function ($element) {
             // Multipart form values will be encoded in JSON.

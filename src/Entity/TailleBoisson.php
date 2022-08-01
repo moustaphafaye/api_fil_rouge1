@@ -15,7 +15,7 @@ class TailleBoisson
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["commander"])]
+    #[Groups(["commander","complement"])]
     #[ORM\Column(type: 'integer')]
     private $id;
 
@@ -27,12 +27,14 @@ class TailleBoisson
     #[ORM\ManyToOne(targetEntity: Boisson::class, inversedBy: 'tailleboisson')]
     private $boisson;
 
-    #[Groups(["add:boisson","commander:detail"])]
+    #[Groups(["add:boisson","commander:detail","complement"])]
     #[ORM\ManyToOne(targetEntity: Taille::class, inversedBy: 'tailleboisson')]
     private $taille;
 
     #[ORM\OneToMany(mappedBy: 'tailleBoisson', targetEntity: CommandeTailleBoisson::class)]
     private $commandetailleboisson;
+
+    
 
     public function __construct()
     {
@@ -113,4 +115,6 @@ class TailleBoisson
 
         return $this;
     }
+
+   
 }

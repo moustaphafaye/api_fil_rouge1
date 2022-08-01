@@ -29,6 +29,7 @@ final class CatalogueDataProvider implements ContextAwareCollectionDataProviderI
     {
         if(Catalogue::class === $resourceClass){
             return  [
+                
                     ["menu"=>$this->menuRepo->findAll()],
                     ["burger"=>$this->burgerRepo->findAll()]
             ];

@@ -1,0 +1,267 @@
+composer dump-autoload
+
+php bin/console cache:clear
+
+
+
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\DetailRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+// #[ORM\Entity(repositoryClass: DetailRepository::class)]
+#[ApiResource(
+    // normalizationContext :['groups' => ['detail:read']],
+    collectionOperations:[],
+    itemOperations: [
+        "get"=>[
+            "method" => "get",
+            "status" => Response::HTTP_OK,
+            'normalization_context' => [ 'groups' => ['detail']],
+                
+        ]
+    ]
+)]
+class Detail
+{
+   
+
+    // #[Groups(['catalogue:read'])]
+    public ?int $id;
+    // #[Groups(['catalogue:read'])]
+    private object $burger;
+    // #[Groups(['catalogue:read'])]
+    private object $menu;
+    // #[Groups(['catalogue:read'])]
+    private $boissons;
+    // #[Groups(['catalogue:read'])]
+    private $frites;
+    
+    public function __construct()
+    {        
+        $this ->boissons = new ArrayCollection();
+        $this ->frites = new ArrayCollection();    
+    }
+
+   
+
+    public function getBurger()
+    {
+        return $this->burger;
+    }
+
+    /**
+     * Set the value of burger
+     *
+     * @return  self
+     */ 
+    public function setBurger($burger)
+    {
+        $this->burger = $burger;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of menu
+     */ 
+    public function getMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * Set the value of menu
+     *
+     * @return  self
+     */ 
+    public function setMenu($menu)
+    {
+        $this->menu = $menu;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of boissons
+     */ 
+    public function getBoissons()
+    {
+        return $this->boissons;
+    }
+
+    /**
+     * Set the value of boissons
+     *
+     * @return  self
+     */ 
+    public function setBoissons($boissons)
+    {
+        $this->boissons = $boissons;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of frites
+     */ 
+    public function getFrites()
+    {
+        return $this->frites;
+    }
+
+    /**
+     * Set the value of frites
+     *
+     * @return  self
+     */ 
+    public function setFrites($frites)
+    {
+        $this->frites = $frites;
+
+        return $this;
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // #[Groups(["detail"])]
+    // public ?int $id;
+
+    // #[Groups(["detail"])]
+    // public ?Burger $burger;
+
+    // #[Groups(["detail"])]
+    // public ?Menu $menu;
+
+    // #[Groups(["detail"])]
+    // public array $frite;
+
+    // #[Groups(["detail"])]
+    // private $tailleBoissons;
+
+    // public function __construct()
+    // {
+        
+        
+    // }
+
+    // public function getId(): ?int
+    // {
+    //     return $this->id;
+    // }
+
+    // public function getBurger(): ?Burger
+    // {
+    //     return $this->burger;
+    // }
+
+    // public function setBurger(?Burger $burger): self
+    // {
+    //     $this->burger = $burger;
+
+    //     return $this;
+    // }
+
+    // public function getMenu(): ?Menu
+    // {
+    //     return $this->menu;
+    // }
+
+    // public function setMenu(?Menu $menu): self
+    // {
+    //     $this->menu = $menu;
+
+    //     return $this;
+    // }
+
+    
+
+    // /**
+    //  * @return Collection<int, PortionFrite>
+    //  */
+    // public function getFrite(): array
+    // {
+    //     return $this->frite;
+    // }
+
+
+    // /**
+    //  * @return Collection<int, TailleBoisson>
+    //  */
+    // public function getTailleBoissons(): Collection
+    // {
+    //     return $this->tailleBoissons;
+    // }
+    // // public function addFrite(PortionFrite $frite): self
+    // {
+    //     if (!$this->frite->contains($frite)) {
+    //         $this->frite[] = $frite;
+    //         $frite->setDetail($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeFrite(PortionFrite $frite): self
+    // {
+    //     if ($this->frite->removeElement($frite)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($frite->getDetail() === $this) {
+    //             $frite->setDetail(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    
+
+    // public function addTailleBoisson(TailleBoisson $tailleBoisson): self
+    // {
+    //     if (!$this->tailleBoissons->contains($tailleBoisson)) {
+    //         $this->tailleBoissons[] = $tailleBoisson;
+    //         $tailleBoisson->setDetail($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeTailleBoisson(TailleBoisson $tailleBoisson): self
+    // {
+    //     if ($this->tailleBoissons->removeElement($tailleBoisson)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($tailleBoisson->getDetail() === $this) {
+    //             $tailleBoisson->setDetail(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    /**
+     * Get the value of burger
+     */ 
+    
+}

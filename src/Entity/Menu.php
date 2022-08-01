@@ -8,6 +8,7 @@ use App\Repository\MenuRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\HttpFoundation\Response;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -23,10 +24,14 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
         ],
    "post"=> [
     'status' => Response::HTTP_CREATED,
+    'input_formats' => [
+    'multipart' => ['multipart/form-data']],
+
     'denormalization_context' => ['groups' => ['ajouter:menu']],
     'normalization_context' => ['groups' => ['menu:all']],
     "security" => "is_granted('ROLE_GESTIONNAIRE')",
     "security_message"=>"Vous n'avez pas access à cette Ressource"
+    
     ]],
     itemOperations:["put"=>[
         "security" => "is_granted('ROLE_GESTIONNAIRE')",
@@ -75,16 +80,21 @@ class Menu extends Produit
     #[Assert\Count(
         min: 1,
         minMessage: 'le menu doit avoir au moins 1 burber')] 
-    #[Groups(["ajouter:menu"])]
+    #[Groups(["ajouter:menu","menu:list","menu:simple","produit","detail"])]
+     #[ApiSubresource]
      #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuBurger::class,cascade:["persist"])]
      private $menuburger;
 
-     #[Groups(["ajouter:menu"])]
+     #[Groups(["ajouter:menu","menu:simple"])]
      #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuPortionFrite::class,cascade:["persist"])]
      private $menuportionfriet;
 
      #[ORM\OneToMany(mappedBy: 'menu', targetEntity: CommandeMenu::class)]
      private $commandemenu;
+
+     
+
+
 
     //  #[ORM\OneToMany(mappedBy: 'menu', targetEntity: CommandeMenu::class)]
     //  private $commandemenu;
@@ -101,36 +111,10 @@ class Menu extends Produit
         $this->menuburger = new ArrayCollection();
         $this->menuportionfriet = new ArrayCollection();
         // $this->commandemenu = new ArrayCollection();
+        $this->details = new ArrayCollection();
        
         
     }
-    // /**
-    //  * @return Collection<int, PortionFrite>
-    //  */
-    // public function getPortionfrites(): Collection
-    // {
-    //     return $this->portionfrites;
-    // }
-
-    // public function addPortionfrite(PortionFrite $portionfrite): self
-    // {
-    //     if (!$this->portionfrites->contains($portionfrite)) {
-    //         $this->portionfrites[] = $portionfrite;
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removePortionfrite(PortionFrite $portionfrite): self
-    // {
-    //     $this->portionfrites->removeElement($portionfrite);
-
-    //     return $this;
-    // }
-
-    
-
-    
 
     /**
      * @return Collection<int, MenuTaille>
@@ -246,35 +230,7 @@ class Menu extends Produit
 
     }
 
-    // /**
-    //  * @return Collection<int, CommandeMenu>
-    //  */
-    // public function getCommandemenu(): Collection
-    // {
-    //     return $this->commandemenu;
-    // }
-
-    // public function addCommandemenu(CommandeMenu $commandemenu): self
-    // {
-    //     if (!$this->commandemenu->contains($commandemenu)) {
-    //         $this->commandemenu[] = $commandemenu;
-    //         $commandemenu->setMenu($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeCommandemenu(CommandeMenu $commandemenu): self
-    // {
-    //     if ($this->commandemenu->removeElement($commandemenu)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($commandemenu->getMenu() === $this) {
-    //             $commandemenu->setMenu(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
+    
 
     /**
      * @return Collection<int, CommandeMenu>
@@ -305,6 +261,37 @@ class Menu extends Produit
 
         return $this;
     }
+
+    // /**
+    //  * @return Collection<int, Detail>
+    //  */
+    // public function getDetails(): Collection
+    // {
+    //     return $this->details;
+    // }
+
+    // public function addDetail(Detail $detail): self
+    // {
+    //     if (!$this->details->contains($detail)) {
+    //         $this->details[] = $detail;
+    //         $detail->setMenu($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeDetail(Detail $detail): self
+    // {
+    //     if ($this->details->removeElement($detail)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($detail->getMenu() === $this) {
+    //             $detail->setMenu(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
     
 
     

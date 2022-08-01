@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 itemOperations:["put","get"=>['status' => Response::HTTP_CREATED,
                 'normalization_context' => ['groups' => ['commander:detail']]]],
     subresourceOperations:[
-        'api_clients_commandes_get_subresource' =>[
+            'api_clients_commandes_get_subresource' =>[
             
             'method' => 'GET',
             'normalization_context' => [ 'groups' => ['commandes:of:client'],]

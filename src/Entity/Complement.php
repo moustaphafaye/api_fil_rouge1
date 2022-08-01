@@ -2,13 +2,21 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\ComplementRepository;
 use Doctrine\ORM\Mapping as ORM;
 use PhpParser\Node\Expr\Cast\Array_;
+use App\Repository\ComplementRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\HttpFoundation\Response;
 
 // #[ORM\Entity(repositoryClass: ComplementRepository::class)]
-#[ApiResource]
+#[ApiResource(collectionOperations:[
+    "get_catalogue"=>[
+        'method' => 'get',
+        'path'=>'/complement',
+        'status' => Response::HTTP_OK,
+        'normalization_context' => ['groups' => ['complement']],
+        
+]])]
 class Complement
 {
     // #[ORM\Id]

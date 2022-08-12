@@ -7,39 +7,41 @@ use App\Repository\DetailRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 // #[ORM\Entity(repositoryClass: DetailRepository::class)]
-#[ApiResource(itemOperations:[
-    "get"=>[
+#[ApiResource(
+    itemOperations:[
+    'get'=>[
         "method" => "get",
         "status" => Response::HTTP_OK,
-        'normalization_context'=>['groups'=>['detail']]
-    ]
+        'normalization_context'=>['groups'=>['detaile','koni']]
+    ],
 ])]
 class Detail
 {
     // #[ORM\Id]
     // #[ORM\GeneratedValue]
     // #[ORM\Column(type: 'integer')]
-    #[Groups(["detail"])]
+    #[Groups(["detaile"])]
     public ?int $id=null;
 
-    #[Groups(["detail"])]
+    #[Groups(["detaile"])]
     public ?Menu $menu;  
     
-    #[Groups(["detail"])]
+    #[Groups(["detaile"])]
     public ?Burger $burger;
 
-    
-    #[Groups(["detail"])]
+    #[SerializedName("Taillee")]
+    #[Groups(["detaile",'koni'])]
     public array $boisson;
     
     
-    #[Groups(["detail"])]
+    #[Groups(["detaile"])]
     public array $frite;
 
 
-    #[Groups(["detail"])]
+    #[Groups(["detaile"])]
     public array $munberger;
     // public function getId(): ?int
     // {

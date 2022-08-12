@@ -17,6 +17,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'status' => Response::HTTP_OK,
     'normalization_context' => ['groups' => ['boisson:list']],],
                         "post"=>[
+                            'input_formats' => [
+                            'multipart' => ['multipart/form-data']],
                             'status' => Response::HTTP_CREATED,
                             'denormalization_context' => ['groups' => ['add:boisson']],  
                             'normalization_context' => ['groups' => ['add:boisson:p']]  
@@ -42,10 +44,13 @@ class  Boisson extends Produit
 
     
     
+    
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private $quantiteboison;
+    
     #[ORM\OneToMany(mappedBy: 'boisson', targetEntity: TailleBoisson::class,cascade:["persist"])]
     #[Groups(["add:boisson","complement"])]
     private $tailleboisson;
-
 
 
     public function __construct()
@@ -113,6 +118,18 @@ class  Boisson extends Produit
                 $tailleboisson->setBoisson(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getQuantiteboison(): ?int
+    {
+        return $this->quantiteboison;
+    }
+
+    public function setQuantiteboison(?int $quantiteboison): self
+    {
+        $this->quantiteboison = $quantiteboison;
 
         return $this;
     }

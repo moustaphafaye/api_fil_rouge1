@@ -11,6 +11,7 @@ use App\Repository\PortionFriteRepository;
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Entity\MenuBurger;
+use App\Repository\BoissonRepository;
 use App\Repository\MenuBurgerRepository;
 use App\Repository\ProduitRepository;
 
@@ -18,7 +19,7 @@ final class DetailDataProvider implements ItemDataProviderInterface, RestrictedD
 {
 
     private $a;
-    public function __construct(ProduitRepository $produitRepository, MenuRepository $menuRepository,BurgerRepository $burgerRepository,TailleRepository $tailleRepository,PortionFriteRepository $friteRepository,MenuBurgerRepository $menuBurgerRepository)
+    public function __construct(BoissonRepository $boissonRepository, ProduitRepository $produitRepository, MenuRepository $menuRepository,BurgerRepository $burgerRepository,TailleRepository $tailleRepository,PortionFriteRepository $friteRepository,MenuBurgerRepository $menuBurgerRepository)
     {
         $this->menuRepository = $menuRepository;
         $this->burgerRepository = $burgerRepository;
@@ -26,6 +27,7 @@ final class DetailDataProvider implements ItemDataProviderInterface, RestrictedD
         $this->friteRepository = $friteRepository;
         $this->menuBurgerRepository=$menuBurgerRepository;
         $this->produitRepository=$produitRepository;
+        $this->boissonRepository=$boissonRepository;
 
     }
 
@@ -40,11 +42,16 @@ final class DetailDataProvider implements ItemDataProviderInterface, RestrictedD
         $detail->id=$id;
         $a=$this->produitRepository->findAll(['type'=>'menu']);
         // dd($a);
-        $detail->menu=$this->menuRepository->findOneBy(['id'=>$id]);
-        $detail->burger=$this->burgerRepository->findOneBy(['id'=>$id]);
-        $detail->boisson=$this->tailleRepository->findAll(['id'=>$id]);
+        $menu=$this->menuRepository->findOneBy(['id'=>$id]);
+        $burger=$this->burgerRepository->findOneBy(['id'=>$id]);
+        if($menu==null){
+            $detail->burger=$burger;
+        }else{
+            $detail->menu=$menu;
+        }
+        $detail->boisson=$this->tailleRepository->findAll([]);
         $detail->frite=$this->friteRepository->findAll();
-        // $detail->menuberger=$this->menuBurgerRepository->findAll(['menu_id'=>$id]);
+        //  $detail->menuberger=$this->menuBurgerRepository->findAll(['menu_id'=>$id]);
         //  dd($detail->menuberger=$this->menuBurgerRepository->findBy(['id_menu'=>$id]));
         // $detail->menu=
         // Retrieve the blog post item from somewhere then return it or null if not found

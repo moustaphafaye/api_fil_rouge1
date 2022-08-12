@@ -21,17 +21,17 @@ class MenuTaille
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["ajouter:menu"])]
+    #[Groups(["ajouter:menu","koni"])]
     #[ORM\Column(type: 'integer')]
     private $id;
 
     #[ORM\Column(type: 'integer')]
-    #[Groups(["ajouter:menutaille","ajouter:menu"])]
+    #[Groups(["ajouter:menutaille","ajouter:menu","koni"])]
     private $quantity;
 
     #[ORM\ManyToOne(targetEntity: Taille::class, inversedBy: 'menutaille')]
-    #[Groups(["ajouter:menutaille","ajouter:menu"])]
-    private $taille;
+    #[Groups(["ajouter:menutaille","ajouter:menu","koni"])]
+    private $taille;    
 
     #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menutaille')]
     #[Groups(["ajouter:menutaille"])]

@@ -104,7 +104,7 @@ class Commande
     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: CommandeTailleBoisson::class,cascade:['Persist'])]
     private $commandetailleboisson;
 
-    #[Groups(["commander","commander:detail"])]
+    #[Groups(["commander","commander:detail","commandes:of:client"])]
     #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'commande')]
     private $zone;
 

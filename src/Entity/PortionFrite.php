@@ -7,10 +7,19 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PortionFriteRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: PortionFriteRepository::class)]
-#[ApiResource]
+#[ApiResource(collectionOperations:[
+    "post"=>[
+    "status" => Response::HTTP_OK,
+    'input_formats' => [
+    'multipart' => ['multipart/form-data']],
+    'denormalization_context' => ['groups' => ['frite']],
+    'normalization_context' => ['groups' => ['portion']]
+    
+]])]
 class PortionFrite extends Produit
 {
     #[ORM\OneToMany(mappedBy: 'portionFrite', targetEntity: MenuPortionFrite::class)]

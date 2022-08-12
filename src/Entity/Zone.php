@@ -11,7 +11,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ZoneRepository::class)]
-#[ApiResource(collectionOperations:["get",
+#[ApiResource(collectionOperations:["get"=>[
+    'method'=>'get',
+    'status' => Response::HTTP_CREATED,
+    'normalization_context'=>['groups'=>['list:zone']]
+],
 "post"=>[
     'status' => Response::HTTP_CREATED,
     'denormalization_context' => ['groups' => ['add:zone']]]],
@@ -20,20 +24,20 @@ class Zone
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["commander","commander:detail"])]
+    #[Groups(["commander","commander:detail","list:zone","commandes:of:client"])]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[Groups(["add:zone","commander:detail"])]
+    #[Groups(["add:zone","commander:detail","list:zone","commandes:of:client"])]
     #[ORM\Column(type: 'string', length: 255)]
     private $nom;
 
     
-    #[Groups(["add:zone"])]
+    #[Groups(["add:zone","list:zone"])]
     #[ORM\Column(type: 'integer')]
     private $prix;
 
-    // #[Groups(["add:zone","commander"])]
+     #[Groups(["list:zone","commandes:of:client"])]
     #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Quartier::class)]
     private $quartier;
 

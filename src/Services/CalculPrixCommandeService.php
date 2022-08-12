@@ -8,6 +8,7 @@ use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 
  class CalculPrixCommandeService  implements DataPersisterInterface{
     private $prix = 0;
+    
     private $qt = 0;
     private $b = 0;
     private $c = 0;
@@ -43,7 +44,7 @@ use ApiPlatform\Core\DataPersister\DataPersisterInterface;
             foreach($data->getCommandetailleboisson() as $taille){
                 $this->prix += ($taille->getTailleBoisson()->getTaille()->getPrix()*($taille->getQuantitetailleboisson()));
                 // $a=$taille->getTailleBoisson()->getId();
-                $this->b=$taille->getTailleBoisson()->getQquantitetailleboissonstock();
+                $this->b=$taille->getTailleBoisson()->getQuantitetailleboissonstock();
                 $this->c +=$taille->getQuantitetailleboisson();
                 if(($this->b)>($this->c)){
                     // $this->repo->findById($a)->$taille->getTailleBoisson()->setQuantitetailleboissonstock(($this->b)-($this->c));

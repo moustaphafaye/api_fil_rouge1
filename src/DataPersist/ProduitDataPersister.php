@@ -35,6 +35,7 @@ class ProduitDataPersister implements DataPersisterInterface
     public function supports($data, array $context = []): bool
     {
         return $data instanceof Produit;
+        
     }
 
     /**
@@ -43,8 +44,12 @@ class ProduitDataPersister implements DataPersisterInterface
     public function persist($data, array $context = [])
     {  
 
+        
         if ($data instanceof Boisson or $data instanceof PortionFrite) {
-            $data->setPrix(0);
+        //    dd($data->getFile()->getRealPath());
+            $image= stream_get_contents(fopen($data->getFile()->getRealPath(),"rt"));
+            $data->setImage($image);
+            // $data->setPrix($this->prix);
         } 
         elseif ($data instanceof Menu) {
            

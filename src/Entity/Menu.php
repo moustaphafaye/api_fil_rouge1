@@ -71,7 +71,7 @@ class Menu extends Produit
 
     
 
-     #[Groups(["ajouter:menu"])]
+     #[Groups(["ajouter:menu","detaile"])]
      #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuTaille::class,cascade:["persist","remove"])]
      private $menutaille;
 
@@ -80,12 +80,12 @@ class Menu extends Produit
     #[Assert\Count(
         min: 1,
         minMessage: 'le menu doit avoir au moins 1 burber')] 
-    #[Groups(["ajouter:menu","menu:list","menu:simple","produit","detail"])]
+    #[Groups(["ajouter:menu","menu:list","menu:simple","produit","detaile"])]
      #[ApiSubresource]
      #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuBurger::class,cascade:["persist"])]
      private $menuburger;
 
-     #[Groups(["ajouter:menu","menu:simple"])]
+     #[Groups(["ajouter:menu","menu:simple","detaile"])]
      #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuPortionFrite::class,cascade:["persist"])]
      private $menuportionfriet;
 

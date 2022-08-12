@@ -16,10 +16,10 @@ class MenuBurger
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["ajouter:menu","menu:simple","menu:list","detail"])]
+    #[Groups(["ajouter:menu","menu:simple","menu:list","detaile"])]
     private $id;
 
-     #[Groups(["ajouter:menu","menu:list","menu:simple"])] 
+     #[Groups(["ajouter:menu","menu:list","menu:simple","detaile"])] 
     #[Assert\NotBlank(message:"la quantité est obligatoire")]
     #[Assert\Positive(message:"la quantité doit étre superieure à 0")]
     #[ORM\Column(type: 'integer')]
@@ -30,7 +30,7 @@ class MenuBurger
     #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menuburger')]
     private $menu;
 
-    #[Groups(["ajouter:menu","menu:list","menu:simple","detail"])]
+    #[Groups(["ajouter:menu","menu:list","menu:simple","detaile"])]
     #[ORM\ManyToOne(targetEntity: Burger::class, inversedBy: 'menuburger')]
     private $burger;
 

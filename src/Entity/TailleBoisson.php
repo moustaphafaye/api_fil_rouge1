@@ -15,15 +15,16 @@ class TailleBoisson
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["commander","complement"])]
+    #[Groups(["commander","complement","detaile","add:boisson"])]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[Groups(["add:boisson"])]
-    #[ORM\Column(type: 'integer')]
+   
+    #[Groups(["detaile","add:boisson"])]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $quantitetailleboissonstock;
 
-    #[Groups(["add:boisson"])]
+    #[Groups(["detaile"])]
     #[ORM\ManyToOne(targetEntity: Boisson::class, inversedBy: 'tailleboisson')]
     private $boisson;
 
@@ -33,6 +34,13 @@ class TailleBoisson
 
     #[ORM\OneToMany(mappedBy: 'tailleBoisson', targetEntity: CommandeTailleBoisson::class)]
     private $commandetailleboisson;
+
+    #[Groups(["detaile"])]
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private $prixtaille;
+
+    
+
 
     
 
@@ -50,18 +58,7 @@ class TailleBoisson
         $this->id=$id;
         return $this;
     }
-    public function getQquantitetailleboissonstock(): ?int
-    {
-        return $this->quantitetailleboissonstock;
-    }
-
-    public function setQuantitetailleboissonstock(int $quantitetailleboissonstock): self
-    {
-        $this->quantitetailleboissonstock = $quantitetailleboissonstock;
-
-        return $this;
-    }
-
+   
     public function getBoisson(): ?Boisson
     {
         return $this->boisson;
@@ -116,5 +113,30 @@ class TailleBoisson
         return $this;
     }
 
+    public function getQuantitetailleboissonstock(): ?int
+    {
+        return $this->quantitetailleboissonstock;
+    }
+
+    public function setQuantitetailleboissonstock(?int $quantitetailleboissonstock): self
+    {
+        $this->quantitetailleboissonstock = $quantitetailleboissonstock;
+
+        return $this;
+    }
+
+    public function getPrixtaille(): ?int
+    {
+        return $this->prixtaille;
+    }
+
+    public function setPrixtaille(?int $prixtaille): self
+    {
+        $this->prixtaille = $prixtaille;
+
+        return $this;
+    }
+
+    
    
 }

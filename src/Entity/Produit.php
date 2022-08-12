@@ -40,27 +40,27 @@ class Produit
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["ajouter:menutaille","detail","menu:simple","menu:of:burger","complement","catalogue","menu:all","burger:list:simple","ajouter:menuburger","burger:all","user:of:burger","ajouter:menu","menu:list","modifier:menu","commander"])]
+    #[Groups(["ajouter:menutaille","add:boisson","detaile","frite","menu:simple","menu:of:burger","complement","catalogue","menu:all","burger:list:simple","ajouter:menuburger","burger:all","user:of:burger","ajouter:menu","menu:list","modifier:menu","commander"])]
     protected $id;
 
     #[Assert\NotBlank(message:"Le nom est Obligatoire")]
-    #[Groups(["burger:list:simple","produit","detail","menu:of:burger","catalogue","complement","menuburger","burger:all","list:taile","boisson:taille","ajouter:menu","ajouter","user:of:burger","menu:simple","menu:list","add:boisson","add:boisson:p","boisson:list"])]
+    #[Groups(["burger:list:simple","frite","produit","detaile","menu:of:burger","catalogue","complement","menuburger","burger:all","list:taile","boisson:taille","ajouter:menu","ajouter","user:of:burger","menu:simple","menu:list","add:boisson","add:boisson:p","boisson:list"])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected $nom;
 
     // #[Assert\NotBlank(message:"Le nom est Obligatoire")]
-    #[Groups(["burger:list:simple","produit","detail","menu:of:burger","burger:all","menu:all","complement","catalogue","ajouter","user:of:burger","menu:simple","menu:list"])]
+    #[Groups(["burger:list:simple","produit","frite","detaile","menu:of:burger","burger:all","menu:all","complement","catalogue","ajouter","user:of:burger","menu:simple","menu:list"])]
     #[ORM\Column(type: 'float', nullable: true)]
     protected $prix; 
 
-    #[Groups(["ajouter","catalogue","complement","produit","modifier"])] 
+    #[Groups(["ajouter","catalogue","complement","frite","produit","modifier","detaile","add:boisson"])] 
     #[ORM\Column(type: 'blob', nullable: true)]
     protected $image;
 
      
      #[UploadableField(mapping:"media_object", fileNameProperty:"filePath")]
     
-    #[Groups(["ajouter","ajouter:menu"])]
+    #[Groups(["ajouter","ajouter:menu","frite","add:boisson"])]
     // #[ORM\Column(type: 'string', length: 255, nullable: true)]
     public ?File $file = null
 ;
@@ -72,11 +72,11 @@ class Produit
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'produit')]
     private $gestionnaire;
 
-    #[Groups(["produit","detail"])]
+    #[Groups(["produit","detaile","frite"])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $description;
 
-    #[Groups(["produit"])]
+    #[Groups(["produit","detaile","frite"    ])]
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private $type;
 

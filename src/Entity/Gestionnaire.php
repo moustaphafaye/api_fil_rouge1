@@ -11,9 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: GestionnaireRepository::class)]
 #[ApiResource(
-    collectionOperations:["get",
-                        "post"],
-itemOperations:["put","get"])]
+   )]
 class Gestionnaire extends User
 {
     #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: Burger::class)]

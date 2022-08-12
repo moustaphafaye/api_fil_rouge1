@@ -13,18 +13,18 @@ class MenuPortionFrite
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["ajouter:menu","menu:simple"])]
+    #[Groups(["ajouter:menu","menu:simple","detaile"])]
      #[ORM\Column(type: 'integer')]
     private $id;
 
-     #[Groups(["ajouter:menu","menu:simple"])]
+     #[Groups(["ajouter:menu","menu:simple","detaile"])]
      #[ORM\Column(type: 'integer')]
     private $quantity;
 
     #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menuportionfriet')]
     private $menu;
 
-     #[Groups(["ajouter:menu","menu:simple"])]
+     #[Groups(["ajouter:menu","menu:simple","detail"])]
      #[ORM\ManyToOne(targetEntity: PortionFrite::class, inversedBy: 'menuprotionfrite')]
     private $portionFrite;
 

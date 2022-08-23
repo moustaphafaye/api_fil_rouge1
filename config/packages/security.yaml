@@ -50,6 +50,7 @@ security:
         - { path: ^/api/produits, roles: PUBLIC_ACCESS }
         - { path: ^/api/details, roles: PUBLIC_ACCESS }
         - { path: ^/api/zones, roles: PUBLIC_ACCESS }
+        # - { path: ^/api/commandes, roles: PUBLIC_ACCESS }
         - { path: ^/api/clients, roles: PUBLIC_ACCESS }
         - { path: ^/api/complement, roles: PUBLIC_ACCESS }
         - { path: ^/api$, roles: PUBLIC_ACCESS }

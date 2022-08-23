@@ -40,7 +40,7 @@ class Produit
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["ajouter:menutaille","add:boisson","detaile","frite","menu:simple","menu:of:burger","complement","catalogue","menu:all","burger:list:simple","ajouter:menuburger","burger:all","user:of:burger","ajouter:menu","menu:list","modifier:menu","commander"])]
+    #[Groups(["ajouter:menutaille","add:boisson","detaile","frite","menu:simple","menu:of:burger","complement","catalogue","menu:all","burger:list:simple","ajouter:menuburger","burger:all","user:of:burger","ajouter:menu","menu:list","modifier:menu"])]
     protected $id;
 
     #[Assert\NotBlank(message:"Le nom est Obligatoire")]

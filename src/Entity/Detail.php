@@ -26,11 +26,15 @@ class Detail
     #[Groups(["detaile"])]
     public ?int $id=null;
 
-    #[Groups(["detaile"])]
-    public ?Menu $menu;  
+    // #[Groups(["detaile"])]
+    // public ?Menu $menu;  
     
-    #[Groups(["detaile"])]
-    public ?Burger $burger;
+    // #[Groups(["detaile"])]
+    // public ?Burger $burger;
+
+    #[Groups("detaile")]
+    public $produit;
+
 
     #[SerializedName("Taillee")]
     #[Groups(["detaile",'koni'])]
@@ -41,8 +45,8 @@ class Detail
     public array $frite;
 
 
-    #[Groups(["detaile"])]
-    public array $munberger;
+    // #[Groups(["detaile"])]
+    // public array $munberger;
     // public function getId(): ?int
     // {
     //     return $this->id;

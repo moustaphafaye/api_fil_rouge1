@@ -30,15 +30,20 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
                     // "security" => "is_granted('ROLE_GESTIONNAIRE')",
                     // "security_message"=>"Vous n'avez pas access à cette Ressource"
                 ]],
-itemOperations:["put","get"=>['status' => Response::HTTP_CREATED,
+itemOperations:["put"=>[
+                    'denormalization_context' => ['groups' => ['modifier:commander']],
+                    'status' => Response::HTTP_CREATED,
+],"get"=>['status' => Response::HTTP_CREATED,
                 'normalization_context' => ['groups' => ['commander:detail']]]],
-    subresourceOperations:[
+    subresourceOperations:[     
+        'api_livraisons_commandes_get_subresource'=>[
+            'method' => 'GET',
+            'normalization_context' => [ 'groups' => ['livraisoncommande']] 
+        ],
             'api_clients_commandes_get_subresource' =>[
-            
             'method' => 'GET',
             'normalization_context' => [ 'groups' => ['commandes:of:client'],]
-
-        ]
+            ]
     ]
                 )]
 class Commande
@@ -46,31 +51,31 @@ class Commande
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["livraison"])]
+    #[Groups(["livraison",'list:zone','commandes:of:client',"commander:list","modifier:commander","uniquezone","livraisoncommande"])]
     private $id;
     
 
-    #[Groups(["commander","commande:ajouter","commander:detail","commandes:of:client"])]
+    #[Groups(["Ilivraison","commander",'list:zone',"commande:ajouter","commander:detail","commandes:of:client","commander:list","uniquezone","livraisoncommande"])]
     #[ORM\Column(type: 'string', nullable: true)]
     private $nCommande;
 
-    #[Groups(["commande:ajouter","commander:list","commander:detail","commandes:of:client"])]
+    #[Groups(["Ilivraison","commande:ajouter","commander:list","commander:detail","commandes:of:client","livraisoncommande"])]
     #[ORM\Column(type: 'date', nullable: true)]
     private $date;
 
-    #[Groups(["commande:ajouter","commander:list","commander:detail","commandes:of:client"])]
+    #[Groups(["Ilivraison","commande:ajouter",'list:zone',"commander:list","commander:detail","commandes:of:client","modifier:commander","uniquezone"])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $etat;
 
-    #[Groups(["commander","commande:ajouter","commander:list","commander:detail","commandes:of:client"])]
+    #[Groups(["uniquezone","Ilivraison","commander","commande:ajouter","commander:list","commander:detail","commandes:of:client","livraisoncommande"])]
     #[ORM\Column(type: 'integer', nullable: true)]
     private $montant;
 
-    #[Groups(["commander","commander:detail"])]
+    #[Groups(["commander","commander:detail","livraisoncommande"])]
     #[ORM\ManyToOne(targetEntity: Livraison::class, inversedBy: 'commandes')]
     private $livraison;
   
-    #[Groups(["commander","commander:detail","commandes:of:client"])]
+    #[Groups(["Ilivraison","commander","commander:list","commander:detail","commandes:of:client"])]
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commande')]
     private $client;
 
@@ -104,11 +109,11 @@ class Commande
     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: CommandeTailleBoisson::class,cascade:['Persist'])]
     private $commandetailleboisson;
 
-    #[Groups(["commander","commander:detail","commandes:of:client"])]
+    #[Groups(["commander","commander:detail","commandes:of:client","commander:list"])]
     #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'commande')]
     private $zone;
 
-    #[Groups(["commander","commander:detail"])]
+    #[Groups(["commander","commander:detail","commandes:of:client","commander:list"])]
     #[ORM\ManyToOne(targetEntity: Quartier::class, inversedBy: 'commande')]
     private $quartier;
 
@@ -255,6 +260,7 @@ class Commande
 
     public function removeCommandeburger(CommandeBurger $commandeburger): self
     {
+        
         if ($this->commandeburger->removeElement($commandeburger)) {
             // set the owning side to null (unless already changed)
             if ($commandeburger->getCommande() === $this) {
@@ -275,6 +281,7 @@ class Commande
 
     public function addCommandemenu(CommandeMenu $commandemenu): self
     {
+       
         if (!$this->commandemenu->contains($commandemenu)) {
             $this->commandemenu[] = $commandemenu;
             $commandemenu->setCommande($this);
@@ -305,6 +312,7 @@ class Commande
 
     public function addCommandefrite(CommandeFrite $commandefrite): self
     {
+        
         if (!$this->commandefrite->contains($commandefrite)) {
             $this->commandefrite[] = $commandefrite;
             $commandefrite->setCommande($this);
@@ -335,6 +343,7 @@ class Commande
 
     public function addCommandetailleboisson(CommandeTailleBoisson $commandetailleboisson): self
     {
+       
         if (!$this->commandetailleboisson->contains($commandetailleboisson)) {
             $this->commandetailleboisson[] = $commandetailleboisson;
             $commandetailleboisson->setCommande($this);
@@ -345,6 +354,7 @@ class Commande
 
     public function removeCommandetailleboisson(CommandeTailleBoisson $commandetailleboisson): self
     {
+        
         if ($this->commandetailleboisson->removeElement($commandetailleboisson)) {
             // set the owning side to null (unless already changed)
             if ($commandetailleboisson->getCommande() === $this) {
@@ -362,6 +372,7 @@ class Commande
 
     public function setZone(?Zone $zone): self
     {
+        
         $this->zone = $zone;
 
         return $this;
@@ -370,16 +381,16 @@ class Commande
     #[Assert\Callback]
     public function validate(ExecutionContextInterface $context, )
     {
-        if ((count($this->getCommandeburger())==0) && (count($this->getCommandemenu())==0)) {
+        // if ((count($this->getCommandeburger())==0) && (count($this->getCommandemenu())==0)) {
             
-            $context->buildViolation('Votre commande doit avoir au moins un menu ou un burger')
-                    ->addViolation();
-        }
+        //     $context->buildViolation('Votre commande doit avoir au moins un menu ou un burger')
+        //             ->addViolation();
+        // }
 
-        if(((count($this->getCommandeburger())!=0) || (count($this->getCommandemenu())!=0)) && ((count($this->getCommandefrite())==0) || (count($this->getCommandetailleboisson())==0))){
-            $context->buildViolation('Votre commande doit avoir au moins un complement')
-                    ->addViolation();
-        }
+        // if(((count($this->getCommandeburger())!=0) || (count($this->getCommandemenu())!=0)) && ((count($this->getCommandefrite())==0) && (count($this->getCommandetailleboisson())==0))){
+        //     $context->buildViolation('Votre commande doit avoir au moins un complement')
+        //             ->addViolation();
+        // }
         
 
     }

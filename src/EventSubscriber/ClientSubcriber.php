@@ -37,6 +37,7 @@ class ClientSubcriber implements EventSubscriberInterface
                 
             return null;
         }
+        // dd($user);
             return $user;
         }
     public function prePersist(LifecycleEventArgs $args)

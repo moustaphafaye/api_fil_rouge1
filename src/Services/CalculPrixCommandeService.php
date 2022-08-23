@@ -18,17 +18,15 @@ use ApiPlatform\Core\DataPersister\DataPersisterInterface;
         $this->_entityManager = $entityManager;
         $this->repo=$repo;
     }
-    /**
-     * {@inheritdoc}
-     */
+   
     public function supports($data, array $context = []): bool
     {
-        return $data ;
+        return $data instanceof Commande ;
     }
    
        public function calculPrixCommade($data){
         
-       
+      
         if ($data instanceof Commande) {
             foreach ($data->getCommandeburger() as $burger) {
                 
@@ -37,9 +35,12 @@ use ApiPlatform\Core\DataPersister\DataPersisterInterface;
             }
             foreach ($data->getCommandemenu() as $menu){
                 $this->prix += ($menu->getMenu()->getPrix())*($menu->getQuantite());
+                
             }
             foreach($data->getCommandefrite() as $frite){
+                
                 $this->prix += ($frite->getPortionFrite()->getPrix())*($frite->getQuantite());
+                // dd($this->prix);
             }
             foreach($data->getCommandetailleboisson() as $taille){
                 $this->prix += ($taille->getTailleBoisson()->getTaille()->getPrix()*($taille->getQuantitetailleboisson()));
@@ -64,8 +65,10 @@ use ApiPlatform\Core\DataPersister\DataPersisterInterface;
             // ($this->repo->findById($a)->setQquantitetailleboissonstock(($this->b)-($this->c)));
 
             $this->qt=$data->getZone()->getPrix();
+            
             $this->prix +=$this->qt;
             $data->setMontant($this->prix);
+            
         }
       }
       public function persist($data, array $context = []){

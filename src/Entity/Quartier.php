@@ -20,12 +20,12 @@ class Quartier
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["add:zone","commander","commander:detail","list:zone","commandes:of:client"])]
+    #[Groups(["add:zone","commander:detail","list:zone","commandes:of:client","commander:list"])]
     #[ORM\Column(type: 'integer')]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(["add:quartier","commander:detail","list:zone","commandes:of:client"])]
+    #[Groups(["add:quartier","commander:detail","list:zone","commandes:of:client","commander:list"])]
     private $libelle;
 
     #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'quartier')]

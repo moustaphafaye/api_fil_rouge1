@@ -19,7 +19,8 @@ use Doctrine\Common\Collections\ArrayCollection;
     'denormalization_context' => ['groups' => ['frite']],
     'normalization_context' => ['groups' => ['portion']]
     
-]])]
+    ],"get"=>[]
+])]
 class PortionFrite extends Produit
 {
     #[ORM\OneToMany(mappedBy: 'portionFrite', targetEntity: MenuPortionFrite::class)]
@@ -52,6 +53,7 @@ class PortionFrite extends Produit
 
     public function addMenuprotionfrite(MenuPortionFrite $menuprotionfrite): self
     {
+        
         if (!$this->menuprotionfrite->contains($menuprotionfrite)) {
             $this->menuprotionfrite[] = $menuprotionfrite;
             $menuprotionfrite->setPortionFrite($this);

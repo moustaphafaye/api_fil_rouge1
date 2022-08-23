@@ -31,7 +31,9 @@ class CommandeDataPersiter implements DataPersisterInterface
      */
     public function supports($data, array $context = []): bool
     {
+     
         return $data instanceof Commande;
+        
     }
     /**
      * @param Commande $data

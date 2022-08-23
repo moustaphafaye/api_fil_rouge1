@@ -19,16 +19,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
 "post"=>[
     'status' => Response::HTTP_CREATED,
     'denormalization_context' => ['groups' => ['add:zone']]]],
-    itemOperations:["put","get"])]
+    itemOperations:["put","get"=>['status' => Response::HTTP_CREATED,
+    'normalization_context'=>['groups'=>['uniquezone']]]
+    ])]
 class Zone
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["commander","commander:detail","list:zone","commandes:of:client"])]
+    #[Groups(["commander:detail","list:zone","commandes:of:client","commander:list","uniquezone"])]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[Groups(["add:zone","commander:detail","list:zone","commandes:of:client"])]
+    #[Groups(["add:zone","commander:detail","list:zone","commandes:of:client","commander:list","uniquezone"])]
     #[ORM\Column(type: 'string', length: 255)]
     private $nom;
 
@@ -37,10 +39,12 @@ class Zone
     #[ORM\Column(type: 'integer')]
     private $prix;
 
-     #[Groups(["list:zone","commandes:of:client"])]
+     #[Groups(["list:zone"])]
     #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Quartier::class)]
     private $quartier;
 
+
+    #[Groups(["list:zone","uniquezone"])]
     #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Commande::class)]
     private $commande;
 

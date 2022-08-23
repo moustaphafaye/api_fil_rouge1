@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["burger:all","ajouter","user:of:burger","user:read:simple","commander","livraison","commander:detail","commandes:of:client"])]
+    #[Groups(["listcommande","burger:all","ajouter","user:of:burger","user:read:simple","commander","livraison","commander:detail","commandes:of:client"])]
     protected $id;
 
     #[Assert\NotBlank(message:"Le nom est Obligatoire")]
@@ -68,11 +68,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // private $burgers;
 
     
-    #[Groups(["user:all","commander:detail","commandes:of:client"])]
+    #[Groups(["listcommande","user:all","commander:detail","commandes:of:client","commander:list"])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected $nom;
 
-    #[Groups(["user:all","commander:detail","commandes:of:client"])]
+    #[Groups(["listcommande","user:all","commander:detail","commandes:of:client","commander:list"])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected $prenom;
 

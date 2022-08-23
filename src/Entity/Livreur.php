@@ -6,23 +6,32 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\LivreurRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: LivreurRepository::class)]
-#[ApiResource()]
+#[ApiResource(collectionOperations:[
+                        "get"=>[
+                            'normalization_context' => ['groups' => ['listcommande']],
+                        ],
+                        "post"=>[
+                        'status' => Response::HTTP_CREATED,
+                        'denormalization_context' => ['groups' => ['']],
+                        ]],
+itemOperations:["put","get"])]
 class Livreur extends User
 {
    
-    #[Groups(["commander:detail"])]
+    #[Groups(["commander:detail","listcommande"])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $etat;
 
-    #[Groups(["commander:detail"])]
+    #[Groups(["commander:detail","listcommande"])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $matriculeMoto;
 
-    #[Groups(["commander:detail"])]
+    #[Groups(["commander:detail","listcommande"])]
     #[ORM\Column(type: 'integer', nullable: true)]
     private $telephone;
 

@@ -14,7 +14,7 @@ class CommandeBurger
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["commander"])]
+    // #[Groups(["commander"])]
     #[ORM\Column(type: 'integer')]
     private $id;
 

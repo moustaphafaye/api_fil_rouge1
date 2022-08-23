@@ -24,7 +24,7 @@ class MenuPortionFrite
     #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menuportionfriet')]
     private $menu;
 
-     #[Groups(["ajouter:menu","menu:simple","detail"])]
+     #[Groups(["ajouter:menu","menu:simple","detaile"])]
      #[ORM\ManyToOne(targetEntity: PortionFrite::class, inversedBy: 'menuprotionfrite')]
     private $portionFrite;
 
